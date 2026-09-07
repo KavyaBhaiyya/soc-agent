@@ -1,0 +1,51 @@
+name: Tests
+
+# Runs automatically on every push and pull request -- this is what "CI" means:
+# GitHub's own servers check out your code fresh and run your test suite,
+# so you (and anyone reviewing your repo) know the tests actually pass,
+# not just "pass on my machine."
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build dataset and train model
+        run: |
+          python data/preprocess.py
+          python agents/triage_agent.py
+
+      - name: Run guardrail tests
+        run: cd tests && python test_guardrails.py
+
+      - name: Run Slack notifier tests
+        run: cd tests && python test_slack_notifier.py
+
+      # These LLM tests use FAKE keys on purpose (see tests/test_llm_narrative.py) --
+      # they test that invalid/missing keys fail gracefully, which is exactly what
+      # CI should verify without needing a real, billable secret. No GitHub Secret
+      # is required for this workflow to fully pass.
+      - name: Run LLM provider fallback tests
+        run: cd tests && python test_llm_narrative.py
+
+      - name: Run batch evaluation (small sample, fast)
+        run: python tests/batch_evaluation.py 500
+
+      # OPTIONAL: to test against a REAL Groq key in CI (not required -- the
+      # fallback tests above already prove the important safety property),
+      # add a repository secret named GROQ_API_KEY (Settings -> Secrets and
+      # variables -> Actions -> New repository secret), then uncomment:
+      #
+      # - name: Live Groq integration test (optional, needs a real key)
+      #   env:
+      #     GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      #   run: python live_demo.py <<< "dos"

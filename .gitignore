@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+*.db
+.DS_Store
+.venv/
+venv/
+.env
+
+# Trained model binaries: NOT committed on purpose (Decision 022). A model
+# trained with one XGBoost version can fail to load with a different one
+# ("input stream corrupted" -- this exact bug was hit and fixed earlier in
+# this project). Regenerated fresh on your own machine/CI via:
+#   python data/preprocess.py && python agents/triage_agent.py
+data/*.joblib
+
+# Cleaned dataset CSVs: also regenerable from the raw KDDTrain.txt/KDDTest.txt
+# (which ARE committed) via data/preprocess.py -- excluding these keeps the
+# repo smaller (~21MB saved) without losing anything, since they're a build
+# artifact, not source data.
+data/train_clean.csv
+data/test_clean.csv

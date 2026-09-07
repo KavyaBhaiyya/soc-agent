@@ -1,0 +1,66 @@
+{
+  "total_records": 22544,
+  "verdicts": {
+    "benign": 12956,
+    "threat_contained": 9588
+  },
+  "severity_counts": {
+    "none": 12956,
+    "low": 2335,
+    "high": 6461,
+    "critical": 792
+  },
+  "predicted_category_counts": {
+    "dos": 6461,
+    "normal": 12956,
+    "probe": 2335,
+    "r2l": 734,
+    "u2r": 58
+  },
+  "ground_truth_category_counts": {
+    "normal": 9711,
+    "dos": 7460,
+    "r2l": 2885,
+    "probe": 2421,
+    "u2r": 67
+  },
+  "correct_predictions": 18285,
+  "total_actions_taken": 17633,
+  "actions_auto_approved": 13,
+  "actions_human_approved": 2,
+  "actions_rate_limited": 17618,
+  "action_type_counts": {
+    "block_ip": 9588,
+    "rate_limit_source": 6461,
+    "isolate_host": 792,
+    "revoke_credentials": 792
+  },
+  "wall_clock_seconds": 162.23,
+  "overall_accuracy": 0.8111,
+  "latency_summary_ms": {
+    "triage": {
+      "mean_ms": 5.901,
+      "median_ms": 5.7,
+      "p95_ms": 7.0,
+      "max_ms": 42.5
+    },
+    "investigation": {
+      "mean_ms": 0.556,
+      "median_ms": 0.5,
+      "p95_ms": 0.7,
+      "max_ms": 18.2
+    },
+    "containment": {
+      "mean_ms": 0.87,
+      "median_ms": 0.9,
+      "p95_ms": 1.4,
+      "max_ms": 21.4
+    },
+    "total": {
+      "mean_ms": 6.515,
+      "median_ms": 6.4,
+      "p95_ms": 8.3,
+      "max_ms": 42.5
+    }
+  }
+}
