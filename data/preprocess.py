@@ -61,6 +61,20 @@ def load_and_clean(path):
         df = df[df["category"] != "unknown"]
     return df
 
+
+def ensure_clean_data():
+    """Generates train_clean.csv/test_clean.csv if missing. Used by
+    TriageAgent.load() to self-heal on fresh deployments (Streamlit Cloud etc.)."""
+    train_path = os.path.join(SCRIPT_DIR, "train_clean.csv")
+    test_path = os.path.join(SCRIPT_DIR, "test_clean.csv")
+    if os.path.exists(train_path) and os.path.exists(test_path):
+        return
+    train = load_and_clean(os.path.join(SCRIPT_DIR, "KDDTrain.txt"))
+    test = load_and_clean(os.path.join(SCRIPT_DIR, "KDDTest.txt"))
+    train.to_csv(train_path, index=False)
+    test.to_csv(test_path, index=False)
+
+
 if __name__ == "__main__":
     train = load_and_clean(os.path.join(SCRIPT_DIR, "KDDTrain.txt"))
     test = load_and_clean(os.path.join(SCRIPT_DIR, "KDDTest.txt"))

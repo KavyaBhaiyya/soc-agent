@@ -76,6 +76,14 @@ class TriageAgent:
         print(f"XGBoost model trained on {len(df)} records and saved.")
 
     def load(self):
+        if not os.path.exists(MODEL_PATH):
+            print("No saved model found -- training fresh (first run on this deployment only)...")
+            from data.preprocess import ensure_clean_data
+            ensure_clean_data()
+            train_csv = os.path.join(os.path.dirname(__file__), "..", "data", "train_clean.csv")
+            self.train(train_csv)
+            return
+
         self.model = joblib.load(MODEL_PATH)
         self.label_encoder = joblib.load(LABEL_ENCODER_PATH)
         self.encoders = joblib.load(ENCODERS_PATH)
